@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- Display a table of students within a branch -->
+<!-- Add appropriate table styles -->
+
+<table>
+    <thead>
+    <tr>
+        <th>Student ID</th>
+        <th>Student Name</th>
+        <th>View</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Loop through students and display details and view button -->
+    <tr th:each="student : ${students}">
+        <td th:text="${student.id}"></td>
+        <td th:text="${student.name}"></td>
+        <td><a th:href="@{/student/{studentId}(studentId=${student.id})}">View</a></td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

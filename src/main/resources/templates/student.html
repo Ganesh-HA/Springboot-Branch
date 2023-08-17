@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- Display student details and edit form (if editing) -->
+<!-- Add appropriate table styles -->
+
+<table>
+    <tr>
+        <th>ID</th>
+        <td th:text="${student.id}"></td>
+    </tr>
+    <tr>
+        <th>Name</th>
+        <td><span th:if="${!isEditing}" th:text="${student.name}"></span>
+            <input th:if="${isEditing}" type="text" th:field="*{name}" /></td>
+    </tr>
+    <!-- Add other properties similarly -->
+</table>
+
+<!-- Edit and Delete buttons -->
+<div>
+    <button th:if="${!isEditing}" th:onclick="'javascript:window.location.href=/student/' + ${student.id} + '/edit'">Edit</button>
+    <button th:if="${isEditing}" type="submit">Save</button>
+    <button th:if="${isEditing}" th:onclick="'javascript:window.location.href=/student/' + ${student.id}">Cancel</button>
+    <button th:if="${!isEditing}" th:onclick="'javascript:window.location.href=/student/' + ${student.id} + '/delete'">Delete</button>
+</div>
+
+</body>
+</html>
