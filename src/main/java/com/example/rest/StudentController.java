@@ -2,10 +2,9 @@ package com.example.rest;
 
 import com.example.domain.Student;
 import com.example.service.StudentService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200/")
@@ -16,35 +15,50 @@ public class StudentController {
         this.studentService = studentService;
     }
 
-    @GetMapping("/")
-    public String showBranches(Model model) {
-        List<String> branchNames = studentService.getAllBranchNames();
-        model.addAttribute("branchNames", branchNames);
-        return "home"; // Make sure the view name matches your template name
-    }
     @GetMapping("/branches/{branchName}")
     public List<Student> showStudentsByBranch(@PathVariable("branchName") String branchName) {
         List<Student> students = studentService.getStudentsByBranch(branchName);
-        return students; // Change to your branch template name
+        return students;
     }
 
-    @GetMapping("/student/{studentId}")
-    public String viewStudent(@PathVariable Long studentId, Model model) {
+    @GetMapping("/branches/{branchName}/student/{studentId}")
+    public Student showStudentById(@PathVariable("branchName") String branchName, @PathVariable Long studentId) {
+        Student student = studentService.showStudentsById(branchName,studentId);
+        return student;
+    }
+
+    @PostMapping("/students/add")
+    public List<Student> addStudent(@RequestBody Student student) {
+        studentService.saveStudent(student);
+        return studentService.getStudentsByBranch(student.getBranch());
+    }
+
+    @PutMapping("/students/{studentId}/edit")
+    public List<Student> editStudent(@PathVariable Long studentId, @RequestBody Student updatedStudent) {
         Student student = studentService.getStudentById(studentId);
-        model.addAttribute("student", student);
-        return "student"; // Change to your student template name
+        if (student != null) {
+            updatedStudent.setId(studentId);
+            studentService.updateStudent(updatedStudent);
+        }
+        return studentService.getStudentsByBranch(updatedStudent.getBranch());
     }
 
-    @PostMapping("/student/{studentId}/edit")
-    public String saveEditedStudent(@ModelAttribute Student student) {
-        studentService.updateStudent(student);
-        return "redirect:/student/" + student.getId();
-    }
-
-    @GetMapping("/student/{studentId}/delete")
-    public String deleteStudent(@PathVariable Long studentId) {
-        studentService.deleteStudent(studentId);
-        return "redirect:/";
+    @DeleteMapping("/students/{studentId}/delete")
+    public List<Student> deleteStudent(@PathVariable Long studentId) {
+        Student student = studentService.getStudentById(studentId);
+        if (student != null) {
+            studentService.deleteStudent(studentId);
+        }
+        return studentService.getStudentsByBranch(student.getBranch());
     }
 }
+
+
+
+
+
+
+
+
+
 

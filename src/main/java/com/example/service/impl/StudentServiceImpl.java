@@ -4,8 +4,6 @@ import com.example.domain.Student;
 import com.example.repository.StudentRepository;
 import com.example.service.StudentService;
 import org.springframework.stereotype.Service;
-import java.util.stream.Collectors;
-
 
 import java.util.List;
 
@@ -17,18 +15,9 @@ public class StudentServiceImpl implements StudentService {
         this.studentRepository = studentRepository;
     }
 
-
     @Override
-    public List<String> getAllBranchNames() {
-        List<Student> students = studentRepository.findAll();
-        return students.stream()
-                .map(Student::getBranch)
-                .distinct()
-                .collect(Collectors.toList());
-    }
-  @Override
     public Student getStudentById(Long id) {
-        return studentRepository.findById(id).orElse(null);
+        return null;
     }
 
     @Override
@@ -37,11 +26,16 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public Student showStudentsById(String branchName, Long studentId) {
+        return studentRepository.showStudentsById(branchName, studentId);
+    }
+
+    @Override
     public void saveStudent(Student student) {
         studentRepository.save(student);
     }
 
-   @Override
+    @Override
     public void updateStudent(Student student) {
         studentRepository.save(student);
     }
@@ -50,5 +44,14 @@ public class StudentServiceImpl implements StudentService {
     public void deleteStudent(Long id) {
         studentRepository.deleteById(id);
     }
-}
 
+    @Override
+    public void addStudent(Student student) {
+        studentRepository.save(student);
+    }
+
+    @Override
+    public Student getStudentByIdAndBranch(Long studentId, String branchName) {
+        return null;
+    }
+}
